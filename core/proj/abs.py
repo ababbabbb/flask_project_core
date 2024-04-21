@@ -1,0 +1,68 @@
+from abc import ABCMeta, abstractmethod
+from typing import Any, Optional
+
+from tamp.interface.container import ContainerAbs
+from tamp.interface.logic import LogicAbs
+from tamp.interface.scanner import ScannerAbs
+from tamp.interface.shell import ShellAbs
+
+
+class ProjectAbs(metaclass=ABCMeta):
+
+    @abstractmethod
+    def setter_extend(
+            self,
+            scanner: ScannerAbs,
+            container: ContainerAbs,
+            logic: LogicAbs,
+            shell: Optional[ShellAbs] = None
+    ):
+        """
+            该方法包含方法链特性，每次都会返回self
+            该方法用于添加项目运行时的扩展配置
+        :param scanner: 扫描器，用于扫描工程路径下的文件并导入对应文件所包含的类/对象，并将其放入container中
+        :param container: 存放扫描器所得类/对象的存储容器
+        :param logic: 用于在container中存在内容后，执行项目启动前的必要逻辑，如：挂载、初始化、关系构造等
+        :param shell: 用于向项目增加该扩展所对应的命令行对象
+        :return:
+        """
+        ...
+
+    @abstractmethod
+    def setter_app(
+            self,
+            scanner: ScannerAbs,
+            container: ContainerAbs,
+            logic: LogicAbs,
+            shell: Optional[ShellAbs] = None
+    ):
+        """
+            扩展配置方法的变种，特殊之处在于
+            1.该方法可不用实现，内部存在默认app配置
+            2.这里的参数，其接口类型应当是指定的app相关接口类型
+        :param scanner:
+        :param container:
+        :param logic:
+        :param shell:
+        :return:
+        """
+        ...
+
+    @abstractmethod
+    def setter_ipAndPort(self, ip: str = '0.0.0.0', port: int = 8080):
+        """
+            这里其实就是为了设置app运行时的ip和端口，同样拥有默认实现
+        :param ip:
+        :param port:
+        :return:
+        """
+        ...
+
+    @abstractmethod
+    def byOrder(self, default_order: str = 'run'):
+        """
+            用于接受并执行命令行内容
+        :param default_order: 无命令行输入时应当执行的默认命令，如：run、debug等
+        :return:
+        """
+        ...
