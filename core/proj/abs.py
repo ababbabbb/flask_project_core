@@ -4,7 +4,7 @@ from typing import Any, Optional
 from tamp.interface.container import ContainerAbs
 from tamp.interface.logic import LogicAbs
 from tamp.interface.scanner import ScannerAbs
-from tamp.interface.shell import ShellAbs
+from tamp.interface.order import OrderAbs
 
 
 class ProjectAbs(metaclass=ABCMeta):
@@ -15,7 +15,7 @@ class ProjectAbs(metaclass=ABCMeta):
             scanner: ScannerAbs,
             container: ContainerAbs,
             logic: LogicAbs,
-            shell: Optional[ShellAbs] = None
+            shell: Optional[OrderAbs] = None
     ):
         """
             该方法包含方法链特性，每次都会返回self
@@ -34,7 +34,7 @@ class ProjectAbs(metaclass=ABCMeta):
             scanner: ScannerAbs,
             container: ContainerAbs,
             logic: LogicAbs,
-            shell: Optional[ShellAbs] = None
+            shell: Optional[OrderAbs] = None
     ):
         """
             扩展配置方法的变种，特殊之处在于
@@ -49,9 +49,15 @@ class ProjectAbs(metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    def setter_ipAndPort(self, ip: str = '0.0.0.0', port: int = 8080):
+    def setter_args(
+            self,
+            ip: str = '0.0.0.0',
+            port: int = 8080,
+            *args,
+            **kwargs
+    ):
         """
-            这里其实就是为了设置app运行时的ip和端口，同样拥有默认实现
+            这里其实就是为了设置app运行时的启动参数，譬如ip和端口，同样拥有默认实现(其中*args、**kwargs主要是受flask限制而不得不加入的参数)
         :param ip:
         :param port:
         :return:
@@ -59,10 +65,9 @@ class ProjectAbs(metaclass=ABCMeta):
         ...
 
     @abstractmethod
-    def byOrder(self, default_order: str = 'run'):
+    def byOrder(self):
         """
             用于接受并执行命令行内容
-        :param default_order: 无命令行输入时应当执行的默认命令，如：run、debug等
         :return:
         """
         ...
