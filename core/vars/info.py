@@ -24,3 +24,6 @@ class ProjectInfo(ProjectInfoAbs):
         delattr(self, name)
 
         return True
+
+
+info = ProjectInfo()

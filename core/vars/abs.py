@@ -1,12 +1,13 @@
 from abc import ABCMeta, abstractmethod
-from typing import Any, Optional, List
+from typing import Any, List, Optional
 
 from flask import Flask
 
+from core.proj.abs import ProjectAbs
 from tamp.interface.container import ContainerAbs
 from tamp.interface.logic import LogicAbs
-from tamp.interface.scanner import ScannerAbs
 from tamp.interface.order import OrderAbs
+from tamp.interface.scanner import ScannerAbs
 
 
 class VarAbs(metaclass=ABCMeta):
@@ -62,12 +63,17 @@ class ProjectInfoAbs(VarAbs):
 class ExtendsAbs(VarAbs):
 
     @abstractmethod
+    def setter_project(self, project: ProjectAbs):
+
+        ...
+
+    @abstractmethod
     def insert(
             self,
-            scanner: ScannerAbs,
-            container: ContainerAbs,
-            logic: LogicAbs,
-            shell: Optional[OrderAbs] = None
+            scanner,
+            container,
+            logic,
+            shell
     ) -> bool:
         ...
 
@@ -96,21 +102,21 @@ class ExtendsAbs(VarAbs):
         ...
 
     @abstractmethod
-    def query_scanner(self, name: str):
+    def query_scanner(self, name: str) -> Optional[ScannerAbs]:
         ...
 
     @abstractmethod
-    def query_container(self, name: str):
-
-        ...
-
-    @abstractmethod
-    def query_logic(self, name: str):
+    def query_container(self, name: str) -> Optional[ContainerAbs]:
 
         ...
 
     @abstractmethod
-    def query_order(self, name: str):
+    def query_logic(self, name: str) -> Optional[LogicAbs]:
+
+        ...
+
+    @abstractmethod
+    def query_order(self, name: str) -> Optional[OrderAbs]:
 
         ...
 

@@ -1,32 +1,35 @@
+import os.path
 from typing import Optional
 
 from core.order.executor import loader
 from core.proj.abs import ProjectAbs
-from core.vars.abs import ProjectInfoAbs, ExtendsAbs, ApplicationAbs, OthersAbs
-from core.vars.application import Application
-from core.vars.extends import Extends
-from core.vars.info import ProjectInfo
-from core.vars.others import OthersVars
+from core.vars.abs import ProjectInfoAbs, ExtendsAbs, ApplicationAbs, OthersAbs, HttpAbs
+from core.vars.application import application
+from core.vars.extends import extends
+from core.vars.http import http
+from core.vars.info import info
+from core.vars.others import others
+from default.app.factory import default_factory
 from tamp.interface.container import ContainerAbs
+from tamp.interface.factory import AppFactoryAbs
 from tamp.interface.logic import LogicAbs
-from tamp.interface.scanner import ScannerAbs
 from tamp.interface.order import OrderAbs
+from tamp.interface.scanner import ScannerAbs
 
 
 class Project(ProjectAbs):
 
     def __init__(self):
         # 初始化，生成必要的容器/对象作为属性
-        self.info: Optional[ProjectInfoAbs] = ProjectInfo()
-        self.extends: Optional[ExtendsAbs] = Extends()
-        self.application: Optional[ApplicationAbs] = Application()
+        self.info: Optional[ProjectInfoAbs] = info
+        self.extends: Optional[ExtendsAbs] = extends.setter_project(self)
+        self.application: Optional[ApplicationAbs] = application
+        self.http: Optional[HttpAbs] = http
 
-        self.others: Optional[OthersAbs] = OthersVars()
-
-        self.manager_shell = None
+        self.others: Optional[OthersAbs] = others
 
         # 向容器属性中加入默认/内置内容
-        ...  # TODO 2024/4/21 初始化加载内容
+        self.setter_app().setter_args()
 
     def setter_extend(self, scanner: ScannerAbs, container: ContainerAbs, logic: LogicAbs,
                       order: Optional[OrderAbs] = None):
@@ -34,9 +37,12 @@ class Project(ProjectAbs):
 
         return self
 
-    def setter_app(self, scanner: ScannerAbs, container: ContainerAbs, logic: LogicAbs,
-                   shell: Optional[OrderAbs] = None):
-        # TODO 2024/4/21 app配置过程(主要是参考以前的老方案)
+    def setter_app(self,
+                   app_factory: AppFactoryAbs = None
+                   ):
+        factory = app_factory if app_factory else default_factory
+
+        self.application.setter_app(factory.get_app())
 
         return self
 
@@ -51,12 +57,27 @@ class Project(ProjectAbs):
         self.info.insert('port', port)
         self.info.insert('args', list(args))
 
-        for key, value in kwargs.items():
-            self.info.insert(key, value)
+        if 'path' in kwargs.keys():
+            path = kwargs.pop('path')
+            self.info.insert('path_dir_code', os.path.abspath(path).replace('main.py', ''))
+
+        self.info.insert('kwargs', kwargs)
 
         return self
 
     def byOrder(self):
+        """
+            加载、运行extends
+            加载命令、执行命令
+        :return:
+        """
+        for name_extends in self.extends.query_names_scanner():
+            scanner = self.extends.query_scanner(name_extends)
+            container = self.extends.query_container(name_extends)
+            logic = self.extends.query_logic(name_extends)
+
+            logic.execute(container.insert(self.info.query('path_dir_code'), scanner))
+
         executor = loader(self)
         executor()
 

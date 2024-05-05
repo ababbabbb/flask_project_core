@@ -54,3 +54,6 @@ class Http(HttpAbs):
         del self.map_detail[name]
 
         return True
+
+
+http = Http()

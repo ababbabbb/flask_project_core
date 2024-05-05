@@ -1,10 +1,11 @@
 from abc import ABCMeta, abstractmethod
-from typing import Any, Optional
+from typing import Optional
 
 from tamp.interface.container import ContainerAbs
+from tamp.interface.factory import AppFactoryAbs
 from tamp.interface.logic import LogicAbs
-from tamp.interface.scanner import ScannerAbs
 from tamp.interface.order import OrderAbs
+from tamp.interface.scanner import ScannerAbs
 
 
 class ProjectAbs(metaclass=ABCMeta):
@@ -31,19 +32,13 @@ class ProjectAbs(metaclass=ABCMeta):
     @abstractmethod
     def setter_app(
             self,
-            scanner: ScannerAbs,
-            container: ContainerAbs,
-            logic: LogicAbs,
-            shell: Optional[OrderAbs] = None
+            app_factory: AppFactoryAbs
     ):
         """
             扩展配置方法的变种，特殊之处在于
             1.该方法可不用实现，内部存在默认app配置
             2.这里的参数，其接口类型应当是指定的app相关接口类型
-        :param scanner:
-        :param container:
-        :param logic:
-        :param shell:
+        :param app_factory:
         :return:
         """
         ...

@@ -1,5 +1,6 @@
 from typing import Dict, Optional
 
+from core.proj.abs import ProjectAbs
 from core.vars.abs import ExtendsAbs
 from tamp.interface.container import ContainerAbs
 from tamp.interface.logic import LogicAbs
@@ -18,12 +19,19 @@ class Extends(ExtendsAbs):
         self.map_logic: Dict[str, LogicAbs] = dict()
         self.map_order: Dict[str, OrderAbs] = dict()
 
+        self.project: Optional[ProjectAbs] = None
+
+    def setter_project(self, project: ProjectAbs):
+        self.project = project
+
+        return self
+
     def insert(
             self,
-            scanner: ScannerAbs,
-            container: ContainerAbs,
-            logic: LogicAbs,
-            order: Optional[OrderAbs] = None
+            scanner,
+            container,
+            logic,
+            order=None
     ) -> bool:
         # 校验名称
         if order:
@@ -37,11 +45,17 @@ class Extends(ExtendsAbs):
         if order:
             assert not self.map_order.get(scanner.name, None), "the name has been existed in orders"
 
-        self.map_scanner[scanner.name] = scanner
-        self.map_container[container.name] = container
-        self.map_logic[logic.name] = logic
+        assert issubclass(scanner, ScannerAbs), "the argument of scanner must be subclass of ScannerAbs"
+        assert issubclass(container, ContainerAbs), "the argument of scanner must be subclass of ContainerAbs"
+        assert issubclass(logic, LogicAbs), "the argument of scanner must be subclass of LogicAbs"
         if order:
-            self.map_order[order.name] = order
+            assert issubclass(order, OrderAbs), "the argument of scanner must be subclass of OrderAbs"
+
+        self.map_scanner[scanner.name] = scanner(self.project)
+        self.map_container[container.name] = container(self.project)
+        self.map_logic[logic.name] = logic(self.project)
+        if order:
+            self.map_order[order.name] = order(self.project)
 
         return True
 
@@ -84,7 +98,7 @@ class Extends(ExtendsAbs):
 
         return self.map_logic.get(name, None)
 
-    def query_order(self, name: str):
+    def query_order(self, name: str) -> Optional[OrderAbs]:
 
         return self.map_order.get(name, None)
 
@@ -95,3 +109,6 @@ class Extends(ExtendsAbs):
         del self.map_order[name]
 
         return True
+
+
+extends = Extends()

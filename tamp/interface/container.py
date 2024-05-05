@@ -1,6 +1,7 @@
 from abc import abstractmethod
 
 from tamp.interface.base import ProjectInterfaceBase
+from tamp.interface.scanner import ScannerAbs
 
 
 class ContainerAbs(ProjectInterfaceBase):
@@ -8,11 +9,11 @@ class ContainerAbs(ProjectInterfaceBase):
     name: str = '...'  # 每一个container必须要有唯一名称，用于core模块进行管理
 
     @abstractmethod
-    def insert(self, *args, **kwargs):
+    def insert(self, path_dir: str, scanner: ScannerAbs):
 
         ...
 
     @abstractmethod
-    def query(self, *args, **kwargs):
+    def query(self):
 
         ...

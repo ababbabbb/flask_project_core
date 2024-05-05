@@ -19,3 +19,6 @@ class OthersVars(OthersAbs):
         delattr(self, name)
 
         return True
+
+
+others = OthersVars()

@@ -37,7 +37,9 @@ def unity_order_loader(e):
 def extends_order_loader(e, project: ProjectAbs):
     extends = project.extends
 
-    commands = [extends.query_order(name) for name in extends.query_names_order()]
+    commands = []
+    for name in extends.query_names_order():
+        commands.extend(extends.query_order(name).get_orders)
 
     for command in commands:
         e.add_command(command)

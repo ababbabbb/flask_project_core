@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, List
 
 from flask import Flask
 
@@ -16,8 +16,13 @@ class Application(ApplicationAbs):
 
     def __init__(self, app: Flask = None):
         self.app: Optional[Flask] = app
+        self.record: List[str] = list()
 
     def setter_app(self, app: Flask):
+
+        for name_attr in self.record:
+            setattr(app, name_attr, self.query(name_attr))
+
         self.app = app
 
         return self
@@ -30,7 +35,11 @@ class Application(ApplicationAbs):
         return True
 
     def insert(self, name: str, var: Any) -> bool:
+        assert name not in self.private_attrs, "the attribute is private in application object"
+
         setattr(self.app, name, var)
+        if name not in self.record:
+            self.record.append(name)
 
         return True
 
@@ -44,5 +53,9 @@ class Application(ApplicationAbs):
         assert name not in self.private_attrs, "the attribute is private in application object"
 
         delattr(self.app, name)
+        self.record.remove(name)
 
         return True
+
+
+application = Application()
