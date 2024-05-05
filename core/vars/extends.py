@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Dict, Optional, Tuple
 
 from core.proj.abs import ProjectAbs
 from core.vars.abs import ExtendsAbs
@@ -6,6 +6,67 @@ from tamp.interface.container import ContainerAbs
 from tamp.interface.logic import LogicAbs
 from tamp.interface.scanner import ScannerAbs
 from tamp.interface.order import OrderAbs
+
+
+class Judge:
+
+    @staticmethod
+    def judge_scanner(map_scanner: Dict[str, ScannerAbs], scanner_cls) -> Tuple[bool, str]:
+
+        if not issubclass(scanner_cls, ScannerAbs):
+
+            return False, "the argument of scanner must be subclass of ScannerAbs"
+
+        scanner_saved = map_scanner.get(scanner_cls.name, None)
+
+        if scanner_saved:
+            if not issubclass(scanner_cls, scanner_saved.__class__):
+
+                return False, "the name has been existed in scanners"
+
+        return True, "pass"
+
+    @staticmethod
+    def judge_container(map_container: Dict[str, ContainerAbs], container_cls) -> Tuple[bool, str]:
+
+        if not issubclass(container_cls, ScannerAbs):
+            return False, "the argument of scanner must be subclass of ContainerAbs"
+
+        container_saved = map_container.get(container_cls.name, None)
+
+        if container_saved:
+            if not issubclass(container_cls, container_saved.__class__):
+                return False, "the name has been existed in containers"
+
+        return True, "pass"
+
+    @staticmethod
+    def judge_logic(map_logic: Dict[str, LogicAbs], logic_cls) -> Tuple[bool, str]:
+
+        if not issubclass(logic_cls, ScannerAbs):
+            return False, "the argument of scanner must be subclass of LogicAbs"
+
+        logic_saved = map_logic.get(logic_cls.name, None)
+
+        if logic_saved:
+            if not issubclass(logic_cls, logic_saved.__class__):
+                return False, "the name has been existed in logics"
+
+        return True, "pass"
+
+    @staticmethod
+    def judge_order(map_order: Dict[str, OrderAbs], order_cls) -> Tuple[bool, str]:
+
+        if not issubclass(order_cls, ScannerAbs):
+            return False, "the argument of scanner must be subclass of OrderAbs"
+
+        order_saved = map_order.get(order_cls.name, None)
+
+        if order_saved:
+            if not issubclass(order_cls, order_saved.__class__):
+                return False, "the name has been existed in orders"
+
+        return True, "pass"
 
 
 class Extends(ExtendsAbs):
@@ -39,17 +100,15 @@ class Extends(ExtendsAbs):
         else:
             assert scanner.name == container.name and scanner.name == logic.name, "the name is not the universal name of this extend"
 
-        assert not self.map_scanner.get(scanner.name, None), "the name has been existed in scanners"
-        assert not self.map_container.get(scanner.name, None), "the name has been existed in containers"
-        assert not self.map_logic.get(scanner.name, None), "the name has been existed in logics"
+        flag_scanner, message_scanner = Judge.judge_scanner(self.map_scanner, scanner)
+        assert flag_scanner, flag_scanner
+        flag_container, message_container = Judge.judge_container(self.map_container, container)
+        assert flag_container, message_container
+        flag_logics, message_logics = Judge.judge_logic(self.map_logic, logic)
+        assert flag_logics, message_logics
         if order:
-            assert not self.map_order.get(scanner.name, None), "the name has been existed in orders"
-
-        assert issubclass(scanner, ScannerAbs), "the argument of scanner must be subclass of ScannerAbs"
-        assert issubclass(container, ContainerAbs), "the argument of scanner must be subclass of ContainerAbs"
-        assert issubclass(logic, LogicAbs), "the argument of scanner must be subclass of LogicAbs"
-        if order:
-            assert issubclass(order, OrderAbs), "the argument of scanner must be subclass of OrderAbs"
+            flag_order, message_order = Judge.judge_order(self.map_order, order)
+            assert flag_order, message_order
 
         self.map_scanner[scanner.name] = scanner(self.project)
         self.map_container[container.name] = container(self.project)

@@ -10,11 +10,10 @@ from core.vars.http import http
 from core.vars.info import info
 from core.vars.others import others
 from default.app.factory import default_factory
-from tamp.interface.container import ContainerAbs
+from default.business import DefaultBusinessScanner, DefaultBusinessContainer, DefaultBusinessLogic
+from default.configuration import DefaultConfigurationScanner, DefaultConfigurationContainer, DefaultConfigurationLogic
+from default.resource import DefaultResourceScanner, DefaultResourceContainer, DefaultResourceLogic
 from tamp.interface.factory import AppFactoryAbs
-from tamp.interface.logic import LogicAbs
-from tamp.interface.order import OrderAbs
-from tamp.interface.scanner import ScannerAbs
 
 
 class Project(ProjectAbs):
@@ -29,10 +28,27 @@ class Project(ProjectAbs):
         self.others: Optional[OthersAbs] = others
 
         # 向容器属性中加入默认/内置内容
-        self.setter_app().setter_args()
+        self.setter_app().setter_args().setter_extend(
+            DefaultResourceScanner,
+            DefaultResourceContainer,
+            DefaultResourceLogic
+        ).setter_extend(
+            DefaultBusinessScanner,
+            DefaultBusinessContainer,
+            DefaultBusinessLogic
+        ).setter_extend(
+            DefaultConfigurationScanner,
+            DefaultConfigurationContainer,
+            DefaultConfigurationLogic
+        )
 
-    def setter_extend(self, scanner: ScannerAbs, container: ContainerAbs, logic: LogicAbs,
-                      order: Optional[OrderAbs] = None):
+    def setter_extend(
+            self,
+            scanner,
+            container,
+            logic,
+            order=None
+    ):
         self.extends.insert(scanner, container, logic, order)
 
         return self
@@ -76,7 +92,8 @@ class Project(ProjectAbs):
             container = self.extends.query_container(name_extends)
             logic = self.extends.query_logic(name_extends)
 
-            logic.execute(container.insert(self.info.query('path_dir_code'), scanner))
+            container.insert(self.info.query('path_dir_code'), scanner)
+            logic.execute(container)
 
         executor = loader(self)
         executor()

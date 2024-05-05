@@ -39,7 +39,7 @@ def extends_order_loader(e, project: ProjectAbs):
 
     commands = []
     for name in extends.query_names_order():
-        commands.extend(extends.query_order(name).get_orders)
+        commands.extend(extends.query_order(name).get_orders())
 
     for command in commands:
         e.add_command(command)

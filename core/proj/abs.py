@@ -1,11 +1,6 @@
 from abc import ABCMeta, abstractmethod
-from typing import Optional
 
-from tamp.interface.container import ContainerAbs
 from tamp.interface.factory import AppFactoryAbs
-from tamp.interface.logic import LogicAbs
-from tamp.interface.order import OrderAbs
-from tamp.interface.scanner import ScannerAbs
 
 
 class ProjectAbs(metaclass=ABCMeta):
@@ -13,10 +8,10 @@ class ProjectAbs(metaclass=ABCMeta):
     @abstractmethod
     def setter_extend(
             self,
-            scanner: ScannerAbs,
-            container: ContainerAbs,
-            logic: LogicAbs,
-            shell: Optional[OrderAbs] = None
+            scanner,
+            container,
+            logic,
+            order=None
     ):
         """
             该方法包含方法链特性，每次都会返回self
@@ -24,7 +19,7 @@ class ProjectAbs(metaclass=ABCMeta):
         :param scanner: 扫描器，用于扫描工程路径下的文件并导入对应文件所包含的类/对象，并将其放入container中
         :param container: 存放扫描器所得类/对象的存储容器
         :param logic: 用于在container中存在内容后，执行项目启动前的必要逻辑，如：挂载、初始化、关系构造等
-        :param shell: 用于向项目增加该扩展所对应的命令行对象
+        :param order: 用于向项目增加该扩展所对应的命令行对象
         :return:
         """
         ...

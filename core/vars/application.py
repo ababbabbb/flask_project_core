@@ -35,6 +35,9 @@ class Application(ApplicationAbs):
         return True
 
     def insert(self, name: str, var: Any) -> bool:
+        # TODO 2024/5/5 我感觉这一段其实还需要再想想再改改，
+        #  因为其他开发者很有可能直接突破对于app属性的规定增改流程，导致增删的属性未被记录，
+        #  目前我能想到的思路就是，直接重写__setter__和__getter__方法，使得属性的增删只能通过规定的流程进行
         assert name not in self.private_attrs, "the attribute is private in application object"
 
         setattr(self.app, name, var)
