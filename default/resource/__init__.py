@@ -42,7 +42,8 @@ class DefaultResourceContainer(ContainerAbs):
     name = name_extend
 
     def insert(self, path_dir: str, scanner: ScannerAbs):
-        pass
+
+        scanner.scan(path_dir)
 
     def query(self):
         pass
