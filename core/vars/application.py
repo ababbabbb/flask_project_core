@@ -27,6 +27,10 @@ class Application(ApplicationAbs):
 
         return self
 
+    def getter_app(self) -> Flask:
+
+        return self.app
+
     def judge_exists_app(self) -> bool:
 
         if not self.app:

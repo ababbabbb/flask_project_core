@@ -13,6 +13,7 @@ from default.app.factory import default_factory
 from default.business import DefaultBusinessScanner, DefaultBusinessContainer, DefaultBusinessLogic
 from default.configuration import DefaultConfigurationScanner, DefaultConfigurationContainer, DefaultConfigurationLogic
 from default.resource import DefaultResourceScanner, DefaultResourceContainer, DefaultResourceLogic
+from default.router import DefaultRouterScanner, DefaultRouterContainer, DefaultRouterLogic, DefaultRouterOrder
 from tamp.interface.factory import AppFactoryAbs
 
 
@@ -40,6 +41,11 @@ class Project(ProjectAbs):
             DefaultConfigurationScanner,
             DefaultConfigurationContainer,
             DefaultConfigurationLogic
+        ).setter_extend(
+            DefaultRouterScanner,
+            DefaultRouterContainer,
+            DefaultRouterLogic,
+            DefaultRouterOrder
         )
 
     def setter_extend(

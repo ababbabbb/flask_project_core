@@ -132,6 +132,11 @@ class ApplicationAbs(VarAbs):
         ...
 
     @abstractmethod
+    def getter_app(self) -> Flask:
+
+        ...
+
+    @abstractmethod
     def judge_exists_app(self) -> bool:
         ...
 
@@ -151,10 +156,9 @@ class ApplicationAbs(VarAbs):
 class HttpAbs(VarAbs):
 
     @abstractmethod
-    def insert(self, name: str, router: str, methods: List[str], resource: Any, **kwargs) -> bool:
+    def insert(self, router: str, methods: List[str], resource: Any, **kwargs) -> bool:
         """
             添加flask路由相关数据/信息
-        :param name:
         :param router:
         :param methods:
         :param resource: fvb/cvb，因为可能后续extends会用restframework，它与flask原生的cbv有些区别，所以暂定any，校验留待实现完成
@@ -163,15 +167,15 @@ class HttpAbs(VarAbs):
         pass
 
     @abstractmethod
-    def query(self, name: str):
+    def query(self, router: str):
         pass
 
     @abstractmethod
-    def query_router(self, name: str):
+    def query_router(self):
         ...
 
     @abstractmethod
-    def destroy(self, name: str) -> bool:
+    def destroy(self, router: str) -> bool:
         pass
 
 

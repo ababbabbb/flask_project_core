@@ -8,3 +8,9 @@
     因此不得不承认，很多的flask第三方扩展是能够为路由的操作和管理提供极大便利的——不一定会比原生更优异，但至少是真的提供了很大的便利\n
     所以说，本模块非常支持使用更加快速、好用的模块去替换
 """
+
+
+from default.router.plan_0.scanner import Plan0RouterScanner as DefaultRouterScanner
+from default.router.plan_0.container import Plan0RouterContainer as DefaultRouterContainer
+from default.router.plan_0.logic import Plan0RouterLogic as DefaultRouterLogic
+from default.router.plan_0.order import Plan0RouterOrder as DefaultRouterOrder

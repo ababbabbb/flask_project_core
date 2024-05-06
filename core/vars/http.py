@@ -1,4 +1,4 @@
-from typing import List, Any, Dict
+from typing import List, Any, Dict, Optional
 
 from core.vars.abs import HttpAbs
 
@@ -7,13 +7,11 @@ class _Detail:
 
     def __init__(
             self,
-            name: str,
             router: str,
             methods: List[str],
             resource: Any
     ):
 
-        self.name = name
         self.router = router
         self.methods = methods
         self.resource = resource
@@ -24,34 +22,31 @@ class Http(HttpAbs):
     def __init__(self):
 
         self.map_detail: Dict[str, _Detail] = dict()
-        self.map_routers: Dict[str, str] = dict()
 
-    def insert(self, name: str, router: str, methods: List[str], resource: Any, **kwargs) -> bool:
+    def insert(self, router: str, methods: List[str], resource: Any, **kwargs) -> bool:
 
-        assert not self.map_detail.get(name, None), "the info of http has existed in project"
+        assert not self.map_detail.get(router, None), "the info of http has existed in project"
 
-        detail = _Detail(name, router, methods, resource)
+        detail = _Detail(router, methods, resource)
 
         if kwargs:
             for key, value in kwargs.items():
                 setattr(detail, key, value)
 
-        self.map_detail[name] = detail
-        self.map_routers[name] = router
+        self.map_detail[router] = detail
 
         return True
 
-    def query(self, name: str):
+    def query(self, router: str) -> Optional[_Detail]:
 
-        return self.map_detail.get(name, None)
+        return self.map_detail.get(router, None)
 
-    def query_router(self, name: str):
+    def query_router(self):
 
-        return self.map_routers.get(name, None)
+        return self.map_detail.keys()
 
-    def destroy(self, name: str) -> bool:
-        del self.map_routers[name]
-        del self.map_detail[name]
+    def destroy(self, router: str) -> bool:
+        del self.map_detail[router]
 
         return True
 
