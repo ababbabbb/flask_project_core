@@ -44,6 +44,8 @@ class RestfulRouterBasic(metaclass=ABCMeta):
         for url, resource_cls in self.dict_resource.items():
             api.add_resource(resource_cls, url)
 
+            self.http.insert(f'{self.url_prefix}{url}', resource_cls.methods, resource_cls)
+
         app.register_blueprint(blueprint, url_prefix=self.url_prefix)
 
     @abstractmethod
