@@ -29,7 +29,7 @@ class Judge:
     @staticmethod
     def judge_container(map_container: Dict[str, ContainerAbs], container_cls) -> Tuple[bool, str]:
 
-        if not issubclass(container_cls, ScannerAbs):
+        if not issubclass(container_cls, ContainerAbs):
             return False, "the argument of scanner must be subclass of ContainerAbs"
 
         container_saved = map_container.get(container_cls.name, None)
@@ -43,7 +43,7 @@ class Judge:
     @staticmethod
     def judge_logic(map_logic: Dict[str, LogicAbs], logic_cls) -> Tuple[bool, str]:
 
-        if not issubclass(logic_cls, ScannerAbs):
+        if not issubclass(logic_cls, LogicAbs):
             return False, "the argument of scanner must be subclass of LogicAbs"
 
         logic_saved = map_logic.get(logic_cls.name, None)
@@ -57,7 +57,7 @@ class Judge:
     @staticmethod
     def judge_order(map_order: Dict[str, OrderAbs], order_cls) -> Tuple[bool, str]:
 
-        if not issubclass(order_cls, ScannerAbs):
+        if not issubclass(order_cls, OrderAbs):
             return False, "the argument of scanner must be subclass of OrderAbs"
 
         order_saved = map_order.get(order_cls.name, None)
