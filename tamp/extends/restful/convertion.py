@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import List, Optional, Dict, Type, TypeVar
 
+from flask import Blueprint
 from flask_restful import Resource, Api
 
 from core.vars.abs import ApplicationAbs, HttpAbs
@@ -41,8 +42,6 @@ class RestfulRouterBasic(metaclass=ABCMeta):
         api = Api(blueprint)
 
         for url, resource_cls in self.dict_resource.items():
-            # 为resource加入get、post、put、patch、delete请求的swagger
-            # 排除内置controller，因为它们是为开发者提供开发服务的，不是让开发者去和别方交流对接的，所以应当隐藏
             api.add_resource(resource_cls, url)
 
         app.register_blueprint(blueprint, url_prefix=self.url_prefix)
