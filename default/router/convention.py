@@ -26,6 +26,10 @@ class RouterBasic(metaclass=ABCMeta):
             detail = self.http.query(route)
             app.add_url_rule(route, None, detail.resource, methods=detail.methods)
 
+    def add_route(self, route: str, method: List[str], resource):
+        self.route.append(route)
+        self.http.insert(route, method, resource)
+
     @abstractmethod
     def register(self):
         ...

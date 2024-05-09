@@ -1,3 +1,4 @@
+import uuid
 from abc import ABCMeta, abstractmethod
 from typing import List, Optional, Dict, Type, TypeVar
 
@@ -20,10 +21,8 @@ class RestfulRouterBasic(metaclass=ABCMeta):
         self.http = http
 
         self.dict_resource: Optional[Dict[str, Type[T]]] = None
-        self.name_bp: Optional[str] = None
-        self.url_prefix: Optional[str] = None
-
-        self.route: List[str] = list()
+        self.name_bp: Optional[str] = str(uuid.uuid4())
+        self.url_prefix: Optional[str] = ''
 
     def init_router(self, application: ApplicationAbs, http: HttpAbs):
         self.application = application
@@ -32,10 +31,10 @@ class RestfulRouterBasic(metaclass=ABCMeta):
     def bind(self):
         app = self.application.getter_app()
 
-        if not self.dict_resource or not self.name_bp or not self.url_prefix:
-            raise ValueError('name_bp、url_prefix、dict_resource cannot be None')
+        if not self.dict_resource or not self.name_bp:
+            raise ValueError('name_bp、dict_resource cannot be None')
 
-        if '/' not in self.url_prefix:
+        if self.url_prefix and '/' not in self.url_prefix:
             raise ValueError('url_prefix must contain \'/\'')
 
         blueprint = Blueprint(self.name_bp.replace('.py', ''), __name__, url_prefix=self.url_prefix)
@@ -51,3 +50,8 @@ class RestfulRouterBasic(metaclass=ABCMeta):
     @abstractmethod
     def register(self):
         ...
+
+
+class ResourceBaisc(Resource):
+
+    ...
