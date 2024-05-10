@@ -170,7 +170,7 @@
 ## 使用说明
 
 * 项目运行：
-  * 必须确保项目中，main文件同级存在resource、business两个文件夹/模块包(内置扩展business、resource规定)                              ![image.png](assets/image.png)
+  * 必须确保项目中，main文件同级存在resource、business两个文件夹/模块包(内置扩展business、resource规定)                              ![img_0.png](assets/img_0.png?t=1715328226489)
   * main文件必须导入并配置project，而后调用byorder方法
     ```
     from core import project
@@ -214,7 +214,7 @@
 
     ```
 * app替换、参数配置可参考project初始化方法
-  * ![image.png](assets/image.png?t=1715326870305)
+  * ![image_1.png](assets/image_1.png?t=1715326870305)
 * 所有setter方法均参考方法链思想，返回值均为对象本身，可连续调用
 * 扩展编写(以restful举例)
   * scanner
@@ -304,7 +304,6 @@
             return orders
 
     ```
-
 
 ## 后续计划
 
