@@ -1,7 +1,0 @@
-### GET hello
-GET http://127.0.0.1:8080/hello
-Accept: application/json
-
-### GET rest
-GET http://127.0.0.1:8080/rest
-Accept: application/json
