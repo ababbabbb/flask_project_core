@@ -7,7 +7,8 @@ from flask_project_restful.scanner import RestfulScanner
 project.setter_args(
     ip='0.0.0.0',
     port='8080',
-    path=__file__
+    path=__file__,
+    debug=True
 ).setter_extend(
     RestfulScanner,
     RestfulContainer,
