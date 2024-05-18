@@ -16,6 +16,7 @@ from flask_projects.default.configuration import DefaultConfigurationScanner, De
 from flask_projects.default.resource import DefaultResourceScanner, DefaultResourceContainer, DefaultResourceLogic
 from flask_projects.default.router import DefaultRouterScanner, DefaultRouterContainer, DefaultRouterLogic, \
     DefaultRouterOrder
+from flask_projects.default.middle import DefaultMiddleScanner, DefaultMiddleContainer, DefaultMiddleLogic
 from flask_projects.interface.factory import AppFactoryAbs
 
 
@@ -39,6 +40,10 @@ class Project(ProjectAbs):
             DefaultBusinessScanner,
             DefaultBusinessContainer,
             DefaultBusinessLogic
+        ).setter_extend(
+            DefaultMiddleScanner,
+            DefaultMiddleContainer,
+            DefaultMiddleLogic
         ).setter_extend(
             DefaultConfigurationScanner,
             DefaultConfigurationContainer,
