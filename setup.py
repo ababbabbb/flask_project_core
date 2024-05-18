@@ -14,11 +14,11 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
 # you need to change all these
-VERSION = '0.0.2'
-DESCRIPTION = "flask projects系列快速开发手脚架核心"
+VERSION = '0.0.3'
+DESCRIPTION = "flask projects系列快速开发手脚架"
 
 setup(
-    name="flask-p",
+    name="flask-projects",
 
     author="bichuantao",
     author_email='17826066203@163.com',
