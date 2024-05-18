@@ -1,6 +1,7 @@
 import click
 from flask_projects.core.proj.abs import ProjectAbs
 from flask_projects.core.order.unity import orders
+from flask_projects.core.vars.info import info
 
 
 @click.group()
@@ -29,7 +30,9 @@ def executor():
                    .............................................
     """
 
-    click.echo(msg)
+    kwargs: dict = info.query('kwargs')
+    if kwargs.get('debug', None):
+        click.echo(msg)
 
 
 def unity_order_loader(e):
