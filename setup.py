@@ -14,7 +14,7 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
 # you need to change all these
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 DESCRIPTION = "flask projects系列快速开发手脚架核心"
 
 setup(
