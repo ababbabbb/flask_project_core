@@ -2,7 +2,7 @@
 
 ## 项目进度
 
-进行中
+已完成
 
 ## 项目介绍
 
@@ -14,48 +14,50 @@
 
 * 本项目开发时使用的python版本为3.8
 * 核心部分代码依赖flask、click(flask最新版本已包含对click的安装需要，仅安装flask即可顺带完成对click的安装)，可直接执行`pip install flask`完成安装
-* 临时文件夹(tamp)中的扩展(extends)中，restful扩展依赖flask_restful，可直接执行`pip install flask-restful`完成安装
+* 本项目可通过`pip install flask—projects`完成安装
 
 ## 项目结构
 
 ```│
-│  README.md
-│
+└─flask_projects
+│  convension.py
+│  __init__.py
+│  
 ├─core
 │  │  __init__.py
-│  │
+│  │  
 │  ├─order
 │  │  │  executor.py
 │  │  │  __init__.py
-│  │  │
+│  │  │  
 │  │  └─unity
-│  │        run.py
-│  │        shell.py
-│  │        __init__.py
-│  │
+│  │     │  run.py
+│  │     │  shell.py
+│  │     └─ __init__.py
+│  │  
 │  ├─proj
-│  │     abs.py
-│  │     project.py
-│  │     __init__.py
-│  │
+│  │  │  abs.py
+│  │  │  project.py
+│  │  └─ __init__.py
+│  │  
 │  └─vars
-│        abs.py
-│        application.py
-│        extends.py
-│        http.py
-│        info.py
-│        others.py
-│        __init__.py
+│     │  abs.py
+│     │  application.py
+│     │  extends.py
+│     │  http.py
+│     │  info.py
+│     │  others.py
+│     └─ __init__.py
 │
 ├─default
 │  │  __init__.py
 │  │
 │  ├─app
-│  │     factory.py
-│  │     __init__.py
+│  │  │  factory.py
+│  │  └─ __init__.py
 │  │
 │  ├─business
-│  │     __init__.py
+│  │  └─ __init__.py
 │  │
 │  ├─configuration
 │  │  │  convention.py
@@ -66,13 +68,24 @@
 │  │  │      __init__.py
 │  │  │
 │  │  └─plan_default
-│  │        container.py
-│  │        logic.py
-│  │        scanner.py
-│  │        __init__.py
+│  │     │  container.py
+│  │     │  logic.py
+│  │     │  scanner.py
+│  │     └─ __init__.py
+│  │
+│  ├─middle
+│  │  │  convention.py
+│  │  │  NameFactory.py
+│  │  │  __init__.py
+│  │  │
+│  │  └─plan_0
+│  │     │  container.py
+│  │     │  logic.py
+│  │     │  scanner.py
+│  │     └─ __init__.py
 │  │
 │  ├─resource
-│  │     __init__.py
+│  │  └─ __init__.py
 │  │
 │  └─router
 │     │  convention.py
@@ -80,56 +93,20 @@
 │     │  __init__.py
 │     │
 │     └─plan_0
-│           container.py
-│           logic.py
-│           order.py
-│           scanner.py
-│           __init__.py
+│        │  container.py
+│        │  logic.py
+│        │  order.py
+│        │  scanner.py
+│        └─ __init__.py
 │
-├─example
-│  │  main.py
-│  │
-│  ├─business
-│  │  └─router
-│  │         Restful.py
-│  │         Unity.py
-│  │         __init__.py
-│  │
-│  └─resource
-│      └─test
-│            example.http
-│
-└─tamp
-│  __init__.py
-│
-└──extends
-    │  │  __init__.py
-    │  │
-    │  ├─ddd
-    │  │      __init__.py
-    │  │
-    │  ├─health
-    │  │      __init__.py
-    │  │
-    │  ├─mvc
-    │  │      __init__.py
-    │  │
-    │  └─restful
-    │        container.py
-    │        convertion.py
-    │        logic.py
-    │        scanner.py
-    │        __init__.py
-    │
-    │
-    └─interface
-          base.py
-          container.py
-          factory.py
-          logic.py
-          order.py
-          scanner.py
-          init__.py
+└─interface
+   │  base.py
+   │  container.py
+   │  factory.py
+   │  logic.py
+   │  order.py
+   │  scanner.py
+   └─ __init__.py
 
 ```
 
@@ -173,7 +150,7 @@
   * 必须确保项目中，main文件同级存在resource、business两个文件夹/模块包(内置扩展business、resource规定)                              ![img_0.png](assets/img_0.png?t=1715328226489)
   * main文件必须导入并配置project，而后调用byorder方法
     ```
-    from core import project
+    from flask_projects.convension import projectfrom core import project
 
 
     project.setter_args(
@@ -192,16 +169,17 @@
   * 扩展配置可以通过调用project提供的setter_extend方法完成，且可以多次调用
 
     ```
-    from core import project
-    from tamp.extends.restful.container import RestfulContainer
-    from tamp.extends.restful.logic import RestfulLogic
-    from tamp.extends.restful.scanner import RestfulScanner
+    from flask_projects.convension import project
+    from flask_project_restful.container import RestfulContainer
+    from flask_project_restful.logic import RestfulLogic
+    from flask_project_restful.scanner import RestfulScanner
 
 
     project.setter_args(
         ip='0.0.0.0',
         port='8080',
-        path=__file__
+        path=__file__,
+        debug=True
     ).setter_extend(
         RestfulScanner,
         RestfulContainer,
@@ -223,9 +201,9 @@
     import os
     import traceback
 
-    from default.router.convention import RouterBasic
-    from default.router.plan_0.scanner import Plan0RouterScanner
-    from tamp.extends.restful.convertion import RestfulRouterBasic
+    from flask_projects.default.router.convention import RouterBasic
+    from flask_projects.default.router.plan_0.scanner import Plan0RouterScanner
+    from flask_project_restful.convertion import RestfulRouterBasic
 
 
     class RestfulScanner(Plan0RouterScanner):
@@ -258,7 +236,7 @@
     ```
   * contaniner(借用了子类重载机制)
     ```container.py
-    from default.router.plan_0.container import Plan0RouterContainer
+    from flask_projects.default.router.plan_0.container import Plan0RouterContainer
 
 
     class RestfulContainer(Plan0RouterContainer):
@@ -268,7 +246,7 @@
     ```
   * logic(借用了子类重载机制)
     ```logic.py
-    from default.router.plan_0.logic import Plan0RouterLogic
+    from flask_projects.default.router.plan_0.logic import Plan0RouterLogic
 
 
     class RestfulLogic(Plan0RouterLogic):
@@ -280,9 +258,9 @@
     ```order.py
     import click
 
-    from core.vars.http import http
-    from default.router.NameFactory import name_extend
-    from tamp.interface.order import OrderAbs
+    from flask_projects.core.vars.http import http
+    from flask_projects.default.router.NameFactory import name_extend
+    from flask_projects.interface.order import OrderAbs
 
 
     @click.command('routes')
@@ -307,7 +285,4 @@
 
 ## 后续计划
 
-* 补充内置extend——middle，为中间件的编写提供基础能力支持
 * 参考spring生态各类集成，逐步增加各种extend
-* 将扩展接口作为第三方包，支持pip下载，便于在不依赖本项目的前提下开发外部extend，并对当前项目做出对应调整
-* 将tamp中的各类extends打作第三方包，支持pip下载
